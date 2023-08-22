@@ -5,6 +5,8 @@
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hot-toast": "^2.4.1",
+    "react-router-dom": "^6.15.0",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
   },
@@ -13,7 +15,6 @@
     "url": "git+https://github.com/ashish385/chat-app-22.git"
   },
   "author": "Ashish Soni",
-  
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

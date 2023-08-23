@@ -3,7 +3,7 @@ import { toast } from "react-hot-toast";
 import { Link } from "react-router-dom";
 
 const Login = () => {
-  const [err, setErr] = useState("");
+  // const [err, setErr] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -12,7 +12,6 @@ const Login = () => {
    
 
     if (!email || !password) {
-        setErr("All field required!");
         toast.error("all")
         return
       }
@@ -75,7 +74,7 @@ const Login = () => {
             <div className="flex justify-between md:justify-around">
               <Link to={"#"}>
                 <span className="text-blue-500 hover:text-blue-700 hover:underline">
-                  Forgot account?
+                  Forgot password?
                 </span>
               </Link>
               <Link to={"/signup"}>

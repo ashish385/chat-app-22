@@ -3,7 +3,6 @@ import { toast } from "react-hot-toast";
 import { Link } from "react-router-dom";
 
 const Login = () => {
-  // const [err, setErr] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();

@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { toast } from "react-hot-toast";
-import { Link } from "react-router-dom";
+import { Link , useNavigate} from "react-router-dom";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../Firebase";
 
 const Login = () => {
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -11,11 +14,21 @@ const Login = () => {
    
 
     if (!email || !password) {
-        toast.error("all")
+        toast.error("all field required!")
         return
       }
-      console.log(email);
-      console.log(password);
+      
+   try {
+     const res = await signInWithEmailAndPassword(auth, email, password);
+     console.log(res.user);
+     toast.success("Log in successfully!")
+     navigate("/")
+   } catch (error) {
+    const errorCode = error.code;
+    console.log(errorCode);
+    const errorMessage = error.message;
+    console.log(errorMessage);
+   }
       
   };
   return (

@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Link,useNavigate } from "react-router-dom";
 import { auth, db } from "../Firebase";
 import { doc, setDoc } from "firebase/firestore";
+import { toast } from "react-hot-toast";
 
 
 
@@ -32,7 +33,7 @@ const Signup = () => {
     const displayName = formdata.firstName + " " + formdata.lastName;
 
     console.log("Printing all data");
-    if (!formdata.firstName || !formdata.lastName || !formdata.email || !formdata.password || !formdata.password || !formdata.gender) {
+    if (!formdata.firstName  || !formdata.email || !formdata.password || !formdata.password || !formdata.gender) {
       alert("Required all field!")
       return;
     }
@@ -45,18 +46,21 @@ const Signup = () => {
       })
       
       const user = res.user;
-      setDoc(doc(db, "users", user.uid), {
+      await setDoc(doc(db, "users", user.uid), {
         firstName: formdata.firstName,
         lastName: formdata.lastName,
+        displayName:displayName,
         email: formdata.email,
         dateOfBirth: formdata.dateOfBirth,
         gender: formdata.gender,
-        userId: user.uid,
+        uid: user.uid,
         timestamp: new Date(),
       });
-      console.log("Sign up successfully!");
+
+      await setDoc(doc(db,"userChats",user.uid),{})
+      toast.success("Sign up successfully!");
       setFormdata("");
-      navigate("/dashboard")
+      navigate("/login")
      
     } catch (error) {
       const errorCode = error.code;

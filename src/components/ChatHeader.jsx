@@ -2,7 +2,8 @@ import React, { createContext } from 'react'
 import { ChatContext } from '../auth/ChatContext';
 
 const ChatHeader = () => {
-  // const { data } = createContext(ChatContext);
+  const { data } = createContext(ChatContext);
+  console.log(data);
   return (
     <div>
       <div className="w-full border-2 shadow-lg ">

@@ -16,9 +16,9 @@ const User = () => {
          doc(db, "userChats", currentUser.uid),
          (doc) => {
            setChats(doc.data());
-           console.log("chats",chats );
          }
        );
+
 
        return () => {
          unsub();
@@ -30,10 +30,12 @@ const User = () => {
 
    const handleSelect = (u) => {
      dispatch({ type: "CHANGE_USER", payload: u });
+     console.log("payload", u);
+    //  console.log(currentUser);
    };
 
-  // console.log(chats);
-  // console.log(Object.entries(chats));
+  
+  
   return (
     <>
       {Object.entries(chats)
@@ -42,7 +44,7 @@ const User = () => {
           <div
             key={chat[0]}
             onClick={() => handleSelect(chat[1].userInfo)}
-            className="group flex gap-2 items-center rounded-lg px-2 py-2 hover:bg-gray-100 shadow-lg"
+            className="group flex gap-2 items-center rounded-lg px-2 py-2 hover:bg-gray-100 shadow-lg cursor-pointer"
           >
             <img
               className="shrink-0 h-11 w-11 rounded-full"
@@ -52,7 +54,7 @@ const User = () => {
             <div className="ltr:ml-3 rtl:mr-3">
               <p className="text-sm font-medium text-slate-700 ">
                 {chat[1].userInfo.displayName}
-                {/* <span>Ashish</span> */}
+                
               </p>
               <p className="text-sm font-medium text-slate-500 group-hover:text-slate-400">
                 {chat[1].lastMessage?.text}

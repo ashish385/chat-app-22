@@ -3,80 +3,72 @@ import { BsEmojiSmile } from "react-icons/bs";
 import { HiOutlinePlus } from "react-icons/hi";
 import { IoMdSend } from "react-icons/io";
 import {
+  addDoc,
   arrayUnion,
+  collection,
   doc,
   serverTimestamp,
   Timestamp,
   updateDoc,
 } from "firebase/firestore";
-import { v4 as uuid } from "uuid";
-import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+// import { v4 as uuid } from "uuid";
+// import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { AuthContext } from '../auth/AuthContext';
 import { ChatContext } from '../auth/ChatContext';
 import { db, storage } from '../Firebase';
 
 const SendMessage = () => {
     const [text, setText] = useState("");
-    const [img, setImg] = useState(null);
+    // const [img, setImg] = useState(null);
 
     const { currentUser } = useContext(AuthContext);
   const { data } = useContext(ChatContext);
+  console.log("data-id", data.chatId);
+  console.log(currentUser.uid);
   
-  const handleSend = async () => {
-    // if (img) {
-    //   const storageRef = ref(storage, uuid());
+  const handleSend = async (e) => {
+    e.preventDefault();
+    if (text === "") {
+      alert("Please enter message");
+      return;
+    }
 
-    //   const uploadTask = uploadBytesResumable(storageRef, img);
+    console.log("message sent", text);
 
-    //   uploadTask.on(
-    //     (error) => {
-    //       //TODO:Handle Error
-    //       console.log(error);
-    //     },
-    //     () => {
-    //       getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-    //         await updateDoc(doc(db, "chats", data.chatId), {
-    //           messages: arrayUnion({
-    //             id: uuid(),
-    //             text,
-    //             senderId: currentUser.uid,
-    //             date: Timestamp.now(),
-    //             img: downloadURL,
-    //           }),
-    //         });
-    //       });
-    //     }
-    //   );
-    // } else {
-    //   await updateDoc(doc(db, "chats", data.chatId), {
-    //     messages: arrayUnion({
-    //       id: uuid(),
-    //       text,
-    //       senderId: currentUser.uid,
-    //       date: Timestamp.now(),
-    //     }),
-    //   });
-    // }
 
-   const updateCurrDoc = await updateDoc(doc(db, "userChats", currentUser.uid), {
-      [data.chatId + ".lastMessage"]: {
-        text,
-      },
-      [data.chatId + ".date"]: serverTimestamp(),
-   });
+      await updateDoc(doc(db, "chats", data.chatId), {
+        messages: arrayUnion({
+          text:text,
+          senderId: currentUser.uid,
+          date: Timestamp.now(),
+          time: Date.now(),
+        }),
+      });
     
+    console.log("update chats");
+
+    const updateCurrDoc = await updateDoc(
+      doc(db, "userChats", currentUser.uid),
+      {
+        [data.chatId + ".lastMessage"]: {
+          text,
+        },
+        [data.chatId + ".date"]: serverTimestamp(),
+      }
+    );
+
     console.log("updateCurrDoc", updateCurrDoc);
 
-   const updateUserDoc = await updateDoc(doc(db, "userChats", data.user.uid), {
+    const updateUserDoc = await updateDoc(doc(db, "userChats", data.user.uid), {
       [data.chatId + ".lastMessage"]: {
         text,
       },
       [data.chatId + ".date"]: serverTimestamp(),
-   });
+    });
     console.log("updateUserDoc", updateUserDoc);
 
     setText("");
-    setImg(null);
+    // setImg(null);
   };
 
 
@@ -89,7 +81,7 @@ const SendMessage = () => {
             <HiOutlinePlus className=" cursor-pointer" />
           </li>
           <li className="flex-1 px-6">
-            <form className="flex justify-between">
+            <form onSubmit={handleSend} className="flex justify-between">
               <label className="w-full relative block">
                 <span className="sr-only">Search</span>
                 <span className="absolute inset-y-0 left-0 flex items-center pl-2"></span>
@@ -104,7 +96,7 @@ const SendMessage = () => {
               </label>
               <button
                 type="submit" 
-                onClick={handleSend}
+                // onClick={handleSend}
                 className="text-2xl ml-4 w-10 h-10 pl-3 hover:opacity-10 hover:bg-gray-50 hover:text-[#052b65] rounded-full"
               >
                 <IoMdSend className=" cursor-pointer " />

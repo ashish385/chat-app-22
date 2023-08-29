@@ -1,14 +1,17 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { signOut } from 'firebase/auth';
 import { auth } from '../Firebase';
+import { ChatContext } from '../auth/ChatContext';
+import { AuthContext } from '../auth/AuthContext';
 
 const Navbar = () => {
 
+  const { currentUser } = useContext(AuthContext);
 
   return (
     <>
       <div className="w-full flex justify-between items-center px-4 py-4 bg-cyan-900 text-white">
-        <div className="text-lg font-bold ">Chat-App</div>
+        <div className="text-lg font-bold ">{ currentUser.displayName}</div>
         <div>
  
             <button

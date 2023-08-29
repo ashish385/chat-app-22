@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { createContext } from 'react'
 import Navbar from '../components/Navbar'
 import ChatUser from '../components/ChatUser'
 import Chats from '../components/Chats'
+import { ChatContext } from '../auth/ChatContext'
 
 const Dashboard = () => {
+ 
   return (
     <>
       <div className="fixed w-full">

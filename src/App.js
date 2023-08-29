@@ -22,7 +22,7 @@ function App() {
       <BrowserRouter>
         <Routes >
           <Route path="/">
-            <Route index element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+            <Route index element={<ProtectedRoute><Dashboard/></ProtectedRoute>} />
             <Route path="login" element={<Login />} />
             <Route path="signup" element={<Signup />} />
           </Route>

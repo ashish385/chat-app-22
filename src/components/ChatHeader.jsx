@@ -1,9 +1,11 @@
-import React, { createContext } from 'react'
+import React, { createContext, useContext } from 'react'
 import { ChatContext } from '../auth/ChatContext';
+import { AuthContext } from '../auth/AuthContext';
 
 const ChatHeader = () => {
-  const { data } = createContext(ChatContext);
-  console.log(data);
+  const { data } = useContext(ChatContext);
+  //  console.log("chat-data", data.user.displayName);
+  
   return (
     <div>
       <div className="w-full border-2 shadow-lg ">
@@ -15,7 +17,7 @@ const ChatHeader = () => {
           />
           <div className="ltr:ml-3 rtl:mr-3">
             <p className="text-sm font-medium text-slate-700 ">
-              {/* {data.user?.displayName} */}
+              {data.user?.displayName}
             </p>
           </div>
         </div>

@@ -11,8 +11,11 @@ const Chats = () => {
   const { data } = useContext(ChatContext);
 
   useEffect(() => {
+    console.log(data.chatId);
     const unSub = onSnapshot(doc(db, "chats", data.chatId), (doc) => {
+      console.log("doc",doc.data());
       doc.exists() && setMessages(doc.data().messages);
+      console.log("chat-data-messages",messages);
     });
 
     return () => {
@@ -20,16 +23,15 @@ const Chats = () => {
     };
   }, [data.chatId]);
 
-  console.log("messagses", messages);
+  console.log("messages", messages);
   return (
     <div>
       <div className="  h-[90vh]  bg-gray-100 ">
         <ChatHeader />
-        <div className="px-4 h-[78vh] w-full relative">
+        <div className="px-4 h-[60vh] w-full  overflow-y-auto">
           {messages.map((m) => (
             <Chat message={m} key={m.id} />
           ))}
-          {/* <Chat /> */}
           <SendMessage messages={ messages} />
         </div>
       </div>

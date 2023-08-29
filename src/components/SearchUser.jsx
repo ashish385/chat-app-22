@@ -14,6 +14,7 @@ import { auth, db } from "../Firebase";
 import { AuthContext } from "../auth/AuthContext";
 
 const SearchUser = () => {
+const [searchResult, setSearchResult] = useState(false)
  const [username, setUsername] = useState("");
  const [user, setUser] = useState(null);
  const [err, setErr] = useState(false);
@@ -23,7 +24,10 @@ const SearchUser = () => {
  const handleSearch = async () => {
    const collection_ref =   collection(db, "users");
    console.log(collection_ref);
-   const q = query(collection_ref, where("displayName", "==", username));
+   const q = query(
+     collection_ref,
+     where("displayName", "==", username || "firstName", "==", username)
+   );
 
    console.log(q);
   
@@ -41,6 +45,7 @@ const SearchUser = () => {
 
  const handleKey = (e) => {
    e.code === "Enter" && handleSearch();
+   setSearchResult(true)
   };
   
  
@@ -91,6 +96,7 @@ const SearchUser = () => {
 
    setUser(null);
    setUsername("");
+   setSearchResult(false);
  };
 
   return (
@@ -109,24 +115,35 @@ const SearchUser = () => {
             value={username}
           />
         </label>
-        <div className="flex justify-center items-center py-4 bg-green-400">
-          {err && <span className="text-red-500">{err}</span>}
+        {searchResult && (
+          <div className="flex justify-center items-center py-4 ">
+            {err && <span className="text-red-500">{err}</span>}
 
-          {/* <img src="" alt="" /> */}
-          {user && (
-            <>
-              <div
-                onClick={handleSelect}
-                className={`${
-                  !user ? "appearance-none h-0" : "block cursor-pointer  "
-                }`}
-              >
-                {/* <img src={user.photoURL} alt="" /> */}
-                <span>{user.displayName}</span>
-              </div>
-            </>
-          )}
-        </div>
+            {/* <img src="" alt="" /> */}
+            {user && (
+              <>
+                <div
+                  onClick={handleSelect}
+                  className={`${
+                    !user
+                      ? "appearance-none h-0"
+                      : " w-full cursor-pointer flex gap-4 items-center  "
+                  } bg-[#E4E4D0] px-4 py-2 rounded-md`}
+                >
+                  {/* <img src={user.photoURL} alt="" /> */}
+                  <img
+                    className="shrink-0 h-11 w-11 rounded-full"
+                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDIQIVEBgprClGHZpi_O4LGK_ArSq4XBwkzYaNn557&s"
+                    alt=""
+                  />
+                  <span className="font-semibold italic">
+                    {user.displayName}
+                  </span>
+                </div>
+              </>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
